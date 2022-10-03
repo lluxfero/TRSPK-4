@@ -1,5 +1,4 @@
-﻿using System.Drawing;
-using static System.Math;
+using System.Drawing;
 
 /*string s;
 Console.WriteLine("======Man======");
@@ -33,18 +32,22 @@ int n1 = 0, n2 = 1;
 Numbers.Swap(ref n1, ref n2);
 Console.WriteLine($"Swap: {n1}, {n2}");
 
-Console.WriteLine("====Math=====");
+Console.WriteLine("====Quadrilateral Perimeter And Area=====");
+
 /*Point a = new Point(-4, -3);
 Point b = new Point(-2, 3);
 Point c = new Point(4, 4);
 Point d = new Point(1, -1);*/
+
 Point a = new Point(4, 0);
 Point b = new Point(2, 4);
 Point c = new Point(1, 1);
 Point d = new Point(4, -2);
+
 double P, S;
 Numbers.GetQuadrilateralPerimeterAndArea(a, b, c, d, out P, out S);
-Console.WriteLine($"Периметр: {P}; Площадь: {S}");
+Console.WriteLine("Периметр: {0:#####.##}", P); 
+Console.WriteLine("Площадь: {0:#####.##}", S);
 class Man
 {
     protected string? name;
@@ -246,7 +249,7 @@ class ArrEl
         get
         {
             foreach (Element e in Arr)
-                if (e.Name == name) return e;
+                if (Equals(e.Name, name)) return e;
             throw new Exception();
         }
     }
@@ -257,22 +260,11 @@ class Numbers
     {
         (n1, n2) = (n2, n1);
     }
-    public static (double, double) GetPositiveVector(Point a, Point b)
-    {
-        double x, y;
-        if (a.X < b.X) x = b.X - a.X;
-        else x = a.X - b.X;
-        if (a.Y < b.Y) y = b.Y - a.Y;
-        else y = a.Y - b.Y;
-        return (x, y);
-    }
     public static double GetSegmentLength(Point a, Point b)
     {
-        double x, y;
-        (x, y) = GetPositiveVector(a, b);
-        x = Math.Pow(x, 2);
-        y = Math.Pow(y, 2);
-        return Math.Sqrt(y + x);
+        double x = b.X - a.X;
+        double y = b.Y - a.Y;
+        return Math.Sqrt(Math.Pow(y, 2) + Math.Pow(x, 2));
     }
     public static double FromCosToSin(double c)
     {
@@ -287,6 +279,14 @@ class Numbers
     }
     public static bool GetQuadrilateralPerimeterAndArea(Point a, Point b, Point c, Point d, out double Perimeter, out double Area)
     {
+        if (a == b || a == c || a == d || b == c || b == d || c == d ||
+           (a.X == b.X & a.X == c.X) || (a.X == c.X & a.X == d.X) || (a.X == b.X & a.X == d.X) || (b.X == c.X & b.X == d.X) ||
+           (a.Y == b.Y & a.Y == c.Y) || (a.Y == c.Y & a.Y == d.Y) || (a.Y == b.Y & a.Y == d.Y) || (b.Y == c.Y & b.Y == d.Y))
+        {
+            Perimeter = 0;
+            Area = 0;
+            return false;
+        }
         double A = GetSegmentLength(a, b);
         double B = GetSegmentLength(b, c);
         double C = GetSegmentLength(c, d);
